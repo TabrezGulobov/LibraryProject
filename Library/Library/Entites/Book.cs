@@ -1,12 +1,13 @@
 
+
 namespace Library.Entites;
 
 public class Book
 {
     Guid Id { get; set; }
-    string Title { get; set; }
-    string Author { get; set; }
-    string Genre { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public string Genre { get; set; }
     int Year { get; set; }
     bool IsAvaliable { get; set; }
     DateTime? DauDate { get; set; }
@@ -32,4 +33,4 @@ public class Book
         Year = year;
         IsAvaliable = true;
     }
-}
+}  

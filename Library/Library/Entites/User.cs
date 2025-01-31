@@ -14,7 +14,7 @@ public sealed class User
     string? Email { get; set; }
     string? Phone { get; set; }
     Role UserRole { get; set; }
-    List<string> BorowedBooks { get; set; }
+    List<Book> BorowedBooks { get; set; }
     
     public User() 
     { 
