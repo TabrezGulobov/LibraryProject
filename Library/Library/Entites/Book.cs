@@ -11,7 +11,8 @@ public class Book
     int Year { get; set; }
     bool IsAvaliable { get; set; }
     DateTime? DauDate { get; set; }
-    User Borrower { get; set; }
+    public User Borrower { get; set; }
+    public bool IsAvailable { get; set; }
 
     public Book()
     {

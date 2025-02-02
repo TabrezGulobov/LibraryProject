@@ -8,6 +8,7 @@ namespace Library.InterFace
         bool Login(string userName, string password);
         void AddBook(string title, string author, string genre, int year);
         List<Book> SearchBooks(string Title, string Author, string Genre, int Year);
+        void BorrowBook(string title, int days);
         void GetUserInfo(string userName);
     }
 }

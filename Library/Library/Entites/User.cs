@@ -13,7 +13,7 @@ public sealed class User
     public string Password { get; set; }
     string? Email { get; set; }
     string? Phone { get; set; }
-    Role UserRole { get; set; }
+    public Role UserRole { get; set; }
     List<Book> BorowedBooks { get; set; }
     
     public User() 

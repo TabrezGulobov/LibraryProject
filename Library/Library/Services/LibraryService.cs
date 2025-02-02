@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Library.Entites;
 using Library.InterFace;
 
@@ -7,58 +8,74 @@ namespace Library.Services;
 public class LibraryService
 {
     public List<User> RegisteredUsers { get; set; } = new List<User>();
-    public User CurrentUser { get; set; } = null;
+    public static User CurrentUser { get; set; } = null;
     public List<Book> Books { get; set; } = new List<Book>();
+
     public bool Registration(string username, string password)
     {
-        if (RegisteredUsers.Any(user => user.UserName == username))
+        foreach (var user in RegisteredUsers)
         {
-            Console.WriteLine("❌ Пользователь с таким именем уже существует.❌");
-            return false;
+            if (user.UserName == username && user.Password == password)
+            {
+                Console.WriteLine("Пользователть с таким именем уже занят");
+                return false;
+            }
         }
-
         var newUser = new User(username, password, Role.User);
         RegisteredUsers.Add(newUser);
-        Console.WriteLine($"✅Пользователь {username} успешно зарегистрирован.✅");
+        Console.WriteLine($"Пользователь {username} успешно зарегистрирован.");
         return true;
     }
+
+
     public bool Login(string username, string password)
     {
-        var user = RegisteredUsers.FirstOrDefault(user => user.UserName == username && user.Password == password);
-        if (user == null)
+        foreach (var user in RegisteredUsers)
         {
-            Console.WriteLine("Неверное имя пользователя или пароль ❗");
-            return false;
+            if (user.UserName == username && user.Password == password)
+            {
+                Console.WriteLine($"Добро пожаловать, {username}❕");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Неверны логин или пароль🤷");
+                return false;
+            }
         }
 
-        CurrentUser = user;
-        Console.WriteLine($"Добро пожаловать, {username} ❕");
         return true;
     }
+
     public void GetAccountInfo(string userName)
     {
-        var user = RegisteredUsers.FirstOrDefault(u => u.UserName == userName);
-        if (user == null)
+        foreach (var user in RegisteredUsers)
         {
-            Console.WriteLine("Пользователь не найден.🤷");
-            return;
+            if (user.UserName == userName)
+            {
+                Console.WriteLine($"Информация о пользователе: Имя: {userName}, Пароль: {user.Password}, Роль:{user.UserRole}");
+            }
+            else
+            {
+                Console.WriteLine("Пользователь с таким именем не найден 🤷");
+            }
         }
-        
     }
+
     public void AddBook(string title, string author, string genre, int year)
-    { 
-        var newBook = new Book(title, author, genre, year); 
-        Books.Add(newBook); 
-        Console.WriteLine($"📚 Книга {title} добавлена в библиотеку.");
+    {
+        var newBook = new Book(title, author, genre, year);
+        Books.Add(newBook);
+        Console.WriteLine($"📚 Книга '{title}' добавлена в библиотеку.");
     }
-    
-    public List<Book> SearchBooks(string Title, string Author, string Genre, int Year)
+
+    public bool SearchBooks(string Title, string Author, string Genre, int Year)
     {
         string choosenGenre = Genre;
         string choosenTitle = Title;
         string choosenAuthor = Author;
         int choosenYear = Year;
-        
+
         List<Book> filteredBooks = new List<Book>();
         foreach (var book in Books)
         {
@@ -66,8 +83,51 @@ public class LibraryService
             {
                 filteredBooks.Add(book);
             }
+
             Console.WriteLine($"Вот похожие варианты по вашему вопросу {book.Title}, {book.Genre}, {book.Author} 📚");
         }
-        return Books;
+
+        return true;
     }
-}   
+
+    public void BorrowBook(string title, int days)
+    {
+        if (CurrentUser == null)
+        {
+            Console.WriteLine("❌ Зарегестрируйтесь, чтобы взять книгу.");
+            return;
+        }
+
+        foreach (var book in Books)
+        {
+            if (book.Title == title)
+            {
+                Console.WriteLine($"Книга '{title}' есть в нашей библиотеке ❕");       
+            }
+            else
+            {
+                Console.WriteLine("❌ Книга не найдена в библиотеке или уже взята другим пользователем");
+            }
+        }
+        
+    }
+
+    public void ReturnBook(string title)
+    {
+        if (CurrentUser == null)
+        {
+            Console.WriteLine("❌ Зарегестрируйтесь, чтобы вернуть книгу библиотеке.");
+            return;
+        }
+
+        var book = Books.FirstOrDefault(b =>
+            b.Title.Equals(title, StringComparison.OrdinalIgnoreCase) && b.Borrower == CurrentUser);
+        if (book == null)
+        {
+            Console.WriteLine("❌ Книга не найдена или не принадлежит вам.");
+            return;
+        }
+
+    }
+    
+}
