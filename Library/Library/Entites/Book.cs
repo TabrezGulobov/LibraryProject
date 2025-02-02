@@ -1,5 +1,3 @@
-
-
 namespace Library.Entites;
 
 public class Book
@@ -8,7 +6,7 @@ public class Book
     public string Title { get; set; }
     public string Author { get; set; }
     public string Genre { get; set; }
-    int Year { get; set; }
+    public int Year { get; set; }
     bool IsAvaliable { get; set; }
     DateTime? DauDate { get; set; }
     public User Borrower { get; set; }

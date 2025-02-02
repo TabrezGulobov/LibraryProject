@@ -15,16 +15,19 @@ namespace Library
             {
                 Console.Clear();
                 Console.WriteLine("📚БИБЛИОТЕКА📚");
-                Console.WriteLine("1. Регистрация");
-                Console.WriteLine("2. Вход");
-                Console.WriteLine("3. Добавить книгу (Только админ)");
-                Console.WriteLine("4. Найти книгу");
-                Console.WriteLine("5. Взять книгу");
-                Console.WriteLine("6. Вернуть книгу");
-                Console.WriteLine("7. Выйти");
+                Console.WriteLine("1. Регистрация📝 ");
+                Console.WriteLine("2. Вход🔑");
+                Console.WriteLine("3. Добавить книгу (Только админ)➕📚");
+                Console.WriteLine("4. Найти книгу🔍📚");
+                Console.WriteLine("5. Взять книгу🤝");
+                Console.WriteLine("6. Вернуть книгу🔙📚");
+                Console.WriteLine("7. Выйти🚪➡️");
                 Console.Write("Выберите действие:");
-                string? choice = Console.ReadLine();
                 
+                string choice = Console.ReadLine();
+                
+
+
                 string genre;
                 string author;
                 string title;

@@ -15,17 +15,19 @@ public class LibraryService
     {
         foreach (var user in RegisteredUsers)
         {
-            if (user.UserName == username && user.Password == password)
+            if (user.UserName == username) // Сравнение без Equals
             {
-                Console.WriteLine("Пользователть с таким именем уже занят");
+                Console.WriteLine("Пользователь с таким именем уже занят ❌");
                 return false;
             }
         }
+
         var newUser = new User(username, password, Role.User);
         RegisteredUsers.Add(newUser);
-        Console.WriteLine($"Пользователь {username} успешно зарегистрирован.");
+        Console.WriteLine($"✅ Пользователь {username} успешно зарегистрирован.");
         return true;
     }
+
 
 
     public bool Login(string username, string password)
@@ -69,26 +71,37 @@ public class LibraryService
         Console.WriteLine($"📚 Книга '{title}' добавлена в библиотеку.");
     }
 
-    public bool SearchBooks(string Title, string Author, string Genre, int Year)
+    public void SearchBooks(string title, string author, string genre, int year)
     {
-        string choosenGenre = Genre;
-        string choosenTitle = Title;
-        string choosenAuthor = Author;
-        int choosenYear = Year;
-
         List<Book> filteredBooks = new List<Book>();
+
         foreach (var book in Books)
         {
-            if (book.Title == choosenTitle && book.Genre == choosenGenre && book.Author == choosenAuthor)
+            bool matchesTitle = string.IsNullOrEmpty(title) || book.Title.Equals(title, StringComparison.OrdinalIgnoreCase);
+            bool matchesAuthor = string.IsNullOrEmpty(author) || book.Author.Equals(author, StringComparison.OrdinalIgnoreCase);
+            bool matchesGenre = string.IsNullOrEmpty(genre) || book.Genre.Equals(genre, StringComparison.OrdinalIgnoreCase);
+            bool matchesYear = (year == 0 || book.Year == year);
+
+            if (matchesTitle && matchesAuthor && matchesGenre && matchesYear)
             {
                 filteredBooks.Add(book);
             }
-
-            Console.WriteLine($"Вот похожие варианты по вашему вопросу {book.Title}, {book.Genre}, {book.Author} 📚");
         }
 
-        return true;
+        if (filteredBooks.Count == 0)
+        {
+            Console.WriteLine("❌ Такой книги нет в нашей библиотеке.");
+        }
+        else
+        {
+            Console.WriteLine("📚 Найденные книги:");
+            foreach (var book in filteredBooks)
+            {
+                Console.WriteLine($"📖 {book.Title} - {book.Author} ({book.Genre}, {book.Year})");
+            }
+        }
     }
+
 
     public void BorrowBook(string title, int days)
     {
@@ -129,5 +142,9 @@ public class LibraryService
         }
 
     }
-    
+    public bool IsAdmin()
+    {
+        return CurrentUser != null && CurrentUser.UserRole == Role.Admin;
+    }
+
 }
