@@ -1,38 +1,26 @@
-namespace Library.Entites;
+using System;
 
-
-public enum Role 
-{ 
-    Admin, 
-    User
-} 
-public sealed class User
-{ 
-    Guid Id { get; set; }
-    public string UserName { get; set; }
-    public string Password { get; set; }
-    string? Email { get; set; }
-    string? Phone { get; set; }
-    public Role UserRole { get; set; }
-    List<Book> BorowedBooks { get; set; }
-    
-    public User() 
+namespace Library.Entities
+{
+    public enum Role 
     { 
-    
-        Id = Guid.NewGuid();
-        UserName = string.Empty;
-        Password = string.Empty;
-        Email = string.Empty;
-        Phone = string.Empty;
-        UserRole = Role.User; 
+        Admin, 
+        User 
     }
 
-
-    public User(string userName, string password, Role role)
+    public sealed class User
     {
-        Id = Guid.NewGuid();
-        UserName = userName;    
-        Password = password;
-        UserRole = role;
+        public Guid Id { get; private set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public Role UserRole { get; set; }
+
+        public User(string userName, string password, Role role)
+        {
+            Id = Guid.NewGuid();
+            UserName = userName;
+            Password = password;
+            UserRole = role;
+        }
     }
 }
